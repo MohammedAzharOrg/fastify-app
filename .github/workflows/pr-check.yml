@@ -9,6 +9,9 @@ jobs:
   test:
     name: Run Tests & Coverage
     runs-on: ubuntu-latest
+    env:
+      PORT: ${{ vars.PORT }}
+      HOST: ${{ vars.HOST }}
 
     steps:
       - name: Checkout Repository
@@ -20,19 +23,13 @@ jobs:
           node-version: 20
           cache: 'npm'
       
-      - name: Verify Node.js and NPM version
-        run: |
-          echo "Node.js version: $(node -v)"
-          echo "NPM version: $(npm -v)"
-      
-      - name: Clean npm cache
-        run: npm cache clean --force
-      
       - name: Install Dependencies
-        run: npm i
+        run: npm ci
+
+      - name: Verify Environment Variables
+        run: |
+          echo "PORT=$PORT"
+          echo "HOST=$HOST"
       
       - name: Run Tests with Environment Variables
-        env: 
-          PORT: ${{ vars.PORT }}
-          HOST: ${{ vars.HOST }}
         run: npm test
