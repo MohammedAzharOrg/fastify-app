@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node dist/src/server.js",
-    "test": "clear && jest --ci",
+    "test": "jest",
     "coverage": "jest --coverage"
   },
   "keywords": [],
