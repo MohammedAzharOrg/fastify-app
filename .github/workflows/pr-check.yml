@@ -23,7 +23,7 @@ jobs:
           node-version: '20.x'
       
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
       
       - name: Check if jest package exists locally
         run: npm list jest || echo "jest package not found"
