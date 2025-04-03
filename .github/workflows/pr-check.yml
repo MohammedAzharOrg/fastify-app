@@ -25,9 +25,9 @@ jobs:
       
       - name: Debug Environment Variables
         run: |
-        echo "PORT=${{ vars.PORT }}"
-        echo "HOST=${{ vars.HOST }}"
-        
+          echo "PORT=${{ vars.PORT }}"
+          echo "HOST=${{ vars.HOST }}"
+
       - name: Run Tests with Environment Variables
         env: 
           PORT: ${{ vars.PORT }}
