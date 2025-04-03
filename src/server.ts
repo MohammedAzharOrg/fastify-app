@@ -8,8 +8,8 @@ const start = async () => {
     const app = createApp();
 
     await app.listen({
-        port: Number(process.env.PORT),
-        host: process.env.HOST
+        port: 3000,
+        host: '0.0.0.0'
     });
 }
 
