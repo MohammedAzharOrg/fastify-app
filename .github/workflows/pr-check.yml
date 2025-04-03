@@ -1,34 +1,32 @@
-name: PR Checks
+name: Node.js CI/CD
 
-on: 
+on:
   pull_request:
     branches:
       - develop
 
 jobs:
-  test:
-    name: Run Tests & Coverage
+  build:
     runs-on: ubuntu-latest
-    env:
-      PORT: ${{ vars.PORT }}
-      HOST: ${{ vars.HOST }}
+
+    strategy:
+      matrix:
+        node-version: [18, 20]
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
-        with: 
-          node-version: '20.x'
-      - run: |
-          npm install
-      
-      - name: Check if jest package exists locally
-        run: npm list jest || echo "jest package not found"
-        
-      - name: Check if fastify package exists locally
-        run: npm list fastify || echo "fastify package not found"
-      
-      - name: Run Tests
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
         run: npm test
+
+      - name: Build project
+        run: npm run build
