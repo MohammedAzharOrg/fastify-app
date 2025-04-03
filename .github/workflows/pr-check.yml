@@ -20,16 +20,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with: 
-          node-version: 20
-          cache: 'npm'
+          node-version: '20.18.1'
       
       - name: Install Dependencies
         run: npm ci
-
-      - name: Verify Environment Variables
-        run: |
-          echo "PORT=$PORT"
-          echo "HOST=$HOST"
       
-      - name: Run Tests with Environment Variables
-        run: npm start
+      - name: Run Tests
+        run: npm test
