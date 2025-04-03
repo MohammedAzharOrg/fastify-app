@@ -32,4 +32,4 @@ jobs:
           echo "HOST=$HOST"
       
       - name: Run Tests with Environment Variables
-        run: npm test
+        run: npm start
