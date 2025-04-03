@@ -23,6 +23,11 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       
+      - name: Debug Environment Variables
+        run: |
+        echo "PORT=${{ vars.PORT }}"
+        echo "HOST=${{ vars.HOST }}"
+        
       - name: Run Tests with Environment Variables
         env: 
           PORT: ${{ vars.PORT }}
