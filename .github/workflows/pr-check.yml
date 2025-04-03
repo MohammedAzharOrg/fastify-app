@@ -27,6 +27,4 @@ jobs:
         env: 
           PORT: ${{ vars.PORT }}
           HOST: ${{ vars.HOST }}
-        run: |
-          export TERM=xterm
-          npm test
+        run: npm test
