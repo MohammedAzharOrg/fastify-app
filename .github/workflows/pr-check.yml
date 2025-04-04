@@ -36,8 +36,13 @@ jobs:
           pwd
           ls -lrt
       
+      - name: Setup .npmrc for Github Packages
+        run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+      
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
       
       - name: Verify if jest and fastify package is installed
         run: |
