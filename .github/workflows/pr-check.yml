@@ -38,5 +38,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
       
+      - name: Verify if jest and fastify package is installed
+        run: |
+          npm list fastify || echo "Package fastify not found"
+          npm list jest || echo "Package jest not found"
+      
       - name: Run Tests
         run: npm test
