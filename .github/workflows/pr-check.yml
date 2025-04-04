@@ -23,21 +23,11 @@ jobs:
         with: 
           node-version: '20.x'
       
-      - name: verify Node.js and npm version
-        run: |
-          node --version
-          npm --version
-          echo "******Checking the source code**********"
-          pwd
-          ls -lrt
-      
       - name: Install Dependencies
         run: npm i
       
-      - name: Verify if jest and fastify package is installed
-        run: |
-          npm list fastify || echo "Package fastify not found"
-          npm list jest || echo "Package jest not found"
-      
       - name: Run Tests
-        run: npm test
+        run: npm run test
+
+      - name: Run Coverage
+        run: npm run coverage
