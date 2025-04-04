@@ -16,11 +16,21 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+      
+      - name: Verify Environment Variables
+        run: |
+          echo "PORT=$PORT"
+          echo "HOST=$HOST"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with: 
-          node-version: '20.x'
+          node-version: '20.18.1'
+      
+      - name: Verify Node.js and NPM versions
+        run: |
+          echo "Node.js version is $(node -v)"
+          echo "NPM version is $(npm -v)"
       
       - name: Install Dependencies
         run: npm ci
