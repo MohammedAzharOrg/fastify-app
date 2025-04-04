@@ -9,6 +9,10 @@ jobs:
   test:
     name: Run Tests & Coverage
     runs-on: ubuntu-latest
+    env:
+      PORT: ${{ vars.PORT }}
+      HOST: ${{ vars.HOST }}
+      TERM: xterm
 
     steps:
       - name: Checkout Repository
@@ -17,14 +21,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with: 
-          node-version: 20
-          cache: 'npm'
+          node-version: '20.x'
       
       - name: Install Dependencies
-        run: npm ci
+        run: npm i
       
-      - name: Run Tests with Environment Variables
-        env: 
-          PORT: ${{ vars.PORT }}
-          HOST: ${{ vars.HOST }}
-        run: npm test
+      - name: Run Tests
+        run: npm run test
+
+      - name: Run Coverage
+        run: npm run coverage
