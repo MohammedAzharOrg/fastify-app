@@ -17,16 +17,11 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      
-      - name: Verify Environment Variables
-        run: |
-          echo "PORT=$PORT"
-          echo "HOST=$HOST"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with: 
-          node-version: '20.18.1'
+          node-version: '20.x'
       
       - name: verify Node.js and npm version
         run: |
