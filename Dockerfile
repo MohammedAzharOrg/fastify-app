@@ -1,30 +1,16 @@
 FROM node:20-alpine
 
+# Set working directory
+WORKDIR /app
 
-# Add a runtime user account, to avoid running as "root", note this is rather superluous as the ECP wrapper runs as a completely different user
-# We use /app/certs for our certificate write area
-USER root
+# Copy package files
+COPY package*.json ./
 
-RUN useradd --system paasuser --uid 1001 --shell /sbin/nologin
-
-RUN mkdir -p /opt/app-root/ && \
-    chown paasuser:paasuser /opt/app-root && \
-    mkdir -p /app/certs && \
-    chown paasuser:paasuser /app/certs && \
-    chmod 777 /app/certs
-
-# Always execute from within the "/opt/app-root" folder by default
-WORKDIR /opt/app-root
-
-COPY . . 
-
-COPY .env .
-
+# Innstall dependencies
 RUN npm install
 
-RUN chmod -R 777 /opt/app-root/*
-
-USER paasuser
+# Copy rest of the application code
+COPY . .
 
 EXPOSE 3000
 
