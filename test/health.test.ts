@@ -11,7 +11,7 @@ describe('health route', () => {
     test('Should return status ok if the server is up and running', async () => {
         const response = await app.inject({
             method: 'GET',
-            url: '/'
+            url: '/health'
         });
 
         expect(response.statusCode).toBe(200);
