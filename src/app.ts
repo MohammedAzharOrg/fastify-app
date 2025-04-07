@@ -5,7 +5,7 @@ const createApp = () => {
         logger: true
     });
 
-    app.get('/', (_req, reply) => {
+    app.get('/health', (_req, reply) => {
         reply.send({
             status: 'ok',
             timestamp: new Date().toISOString()
