@@ -1,4 +1,4 @@
-FROM artifactory.aexp.com/paas-registry/buildpacks/rhel-nodejs-20-builder:20.x.latest
+FROM node:20-alpine
 
 
 # Add a runtime user account, to avoid running as "root", note this is rather superluous as the ECP wrapper runs as a completely different user
