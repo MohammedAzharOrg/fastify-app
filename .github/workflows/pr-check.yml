@@ -10,13 +10,16 @@ jobs:
     name: Run Tests & Coverage
     runs-on: ubuntu-latest
     env:
-      PORT: ${{ vars.PORT }}
-      HOST: ${{ vars.HOST }}
-      TERM: xterm
+      TERM: xterm # enables colored and formatted output
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Load Environments
+        run: |
+          export $(grep -v '^#' .env | xargs)
+          echo "PORT: $PORT"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
