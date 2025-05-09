@@ -28,7 +28,6 @@ jobs:
           tags: ${{ github.sha }}
           context: .
           file: ./Dockerfile
-          outputs: type=digest
       
       - name: Save Docker Image SHA
         run: echo "IMAGE_SHA=${{ steps.build_push.outputs.digest }}" >> $GITHUB_ENV
