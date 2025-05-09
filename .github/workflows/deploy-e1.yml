@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -19,13 +18,24 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       
-      - name: Build Docker Image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/fastify-app:${{ github.sha }} .
+      - name: Build and Push Docker Image
+        id: build_push
+        uses: docker/build-push-action@v4
+        with: 
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ github.repository }}-image
+          outputs: type=digest
+      
+      - name: Save Docker Image SHA
+        run: echo "IMAGE_SHA=${{ steps.build_push.outputs.digest }}" >> $GITHUB_ENV
 
-      - name: Push Docker Image
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/fastify-app:${{ github.sha }}
+      - name: Upload Image SHA
+        uses: actions/upload-artifact@v3
+        with:
+          name: image-sha
+          path: $GITHUB_ENV 
 
   deploy: 
     runs-on: ubuntu-latest
