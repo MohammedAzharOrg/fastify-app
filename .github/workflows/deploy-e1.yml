@@ -6,8 +6,10 @@ on:
       - develop # Triggers when merging PRs into develop
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
+    outputs:
+      image_sha: ${{ steps.build_push.outputs.sha256 }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -20,16 +22,15 @@ jobs:
       
       - name: Build and Push Docker Image
         id: build_push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with: 
+          push: true
+          tags: ${{ github.sha }}
           context: .
           file: ./Dockerfile
-          push: true
-          tags: ${{ github.repository }}-image
-          outputs: type=digest
       
       - name: Save Docker Image SHA
-        run: echo "IMAGE_SHA=${{ steps.build_push.outputs.digest }}" >> $GITHUB_ENV
+        run: echo "IMAGE_SHA=${{ steps.build_push.outputs.sha256 }}" >> $GITHUB_ENV
 
       - name: Upload Image SHA
         uses: actions/upload-artifact@v4
