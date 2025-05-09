@@ -32,7 +32,7 @@ jobs:
         run: echo "IMAGE_SHA=${{ steps.build_push.outputs.digest }}" >> $GITHUB_ENV
 
       - name: Upload Image SHA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: image-sha
           path: $GITHUB_ENV 
