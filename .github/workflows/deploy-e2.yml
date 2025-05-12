@@ -1,70 +1,59 @@
-name: Test, Build & Deploy to E2
+name: Deploy to E2 (Staging)
 
 on: 
-  push:
-    branches:
-      - release/** # Triggers when merging PRs into release branch
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: 'Git tag to build and deploy (e.g., v1.0.0)'
+        required: true
+        type: string
 
 jobs:
-  test:
-    name: Run Tests & Coverage
+  deploy-to-e2:
+    name: Build and Deploy to E2
     runs-on: ubuntu-latest
-    env:
-      TERM: xterm # enables colored and formatted output
-    
-    strategy:
-      matrix:
-        node-version: [22.x, 23.x]
 
-    steps:
-      - name: Checkout Repository
+    steps: 
+      - name: Checkout tagged colored
         uses: actions/checkout@v4
-
-      - name: Load Environments
-        run: |
-          export $(grep -v '^#' .env | xargs)
-          echo "PORT: $PORT"
-
-      - name: Setup Node.js (${{ matrix.node-version }})
+        with:
+          ref: ${{ github.event.inputs.version_tag }}
+      
+      - name: Setup Node.js v20.18.1
         uses: actions/setup-node@v4
         with: 
-          node-version: ${{ matrix.node-version }}
+          node-version: v20.18.1
       
       - name: Install Dependencies
         run: npm i
-      
-      - name: Run Tests
+
+      - name: Run Unit and Integration Tests
         run: npm run test
 
-      - name: Run Coverage
+      - name: Check Code Coverage
         run: npm run coverage
-
-  build:
-    runs-on: ubuntu-latest
-    needs: test
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
+      
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      
+
       - name: Build Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/fastify-app:${{ github.sha }} .
+          docker build -t fastify-app:${{ github.event.inputs.version_tag }} .
 
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/fastify-app:${{ github.sha }}
+          docker push fastify-app:${{ github.event.inputs.version_tag }}
+      
+      - name: Upload Tag as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-tag
+          path: |
+            ./
 
-  deploy: 
-    runs-on: ubuntu-latest
-    needs: [test, build]
-
-    steps:
-      - name: Deployment step
-        run: echo "Deploying to E2...(Replace this with actual deployment)"
+      - name: Deploy to E2
+        run: |
+          echo "Deploying fastify-app:${{ github.event.inputs.version_tag }} to E2..."
