@@ -1,9 +1,12 @@
 name: Deploy to E2 (Staging)
 
 on: 
-  push:
-    branches:
-      - release
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: 'Git tag to build and deploy (e.g., v1.0.0)'
+        required: true
+        type: string
 
 jobs:
   deploy-to-e2:
