@@ -1,11 +1,39 @@
-name: Build & Deploy to E1
+name: Test, Build & Deploy to E1
 
 on: 
   push:
     branches:
-      - develop # Triggers when merging PRs into develop
+      - develop # Triggers on every push to develop (post-merge)
 
 jobs:
+  test:
+    name: Run Tests & Coverage
+    runs-on: ubuntu-latest
+    env:
+      TERM: xterm # enables colored and formatted output
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Load Environments
+        run: |
+          export $(grep -v '^#' .env | xargs)
+          echo "PORT: $PORT"
+
+      - name: Setup Node.js v20.18.1
+        uses: actions/setup-node@v4
+        with: 
+          node-version: v20.18.1
+      
+      - name: Install Dependencies
+        run: npm i
+      
+      - name: Run Tests
+        run: npm run test
+
+      - name: Run Coverage
+        run: npm run coverage
+
   build-and-push:
     runs-on: ubuntu-latest
     steps:
