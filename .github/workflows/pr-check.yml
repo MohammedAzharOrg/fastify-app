@@ -11,14 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TERM: xterm # enables colored and formatted output
+      PORT: 3000
+      HOST: 0.0.0.0
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
-      - name: Load Environments
-        run: |
-          export $(grep -v '^#' .env | xargs)
-          echo "PORT: $PORT"
 
       - name: Setup Node.js v20.18.1
         uses: actions/setup-node@v4
